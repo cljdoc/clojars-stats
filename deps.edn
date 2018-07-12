@@ -1,3 +1,9 @@
-{:deps {clj-http-lite {:mvn/version "0.3.0"}
+{:paths ["src" "resources"]
+ :deps {clj-http-lite {:mvn/version "0.3.0"}
+        com.layerware/hugsql {:mvn/version "0.4.9"}
         org.xerial/sqlite-jdbc {:mvn/version "3.20.0"}
-        org.clojure/java.jdbc {:mvn/version "0.7.0"}}}
+        org.clojure/java.jdbc {:mvn/version "0.7.0"}
+        ring/ring-core {:mvn/version "1.7.0-RC1"}
+        ring/ring-jetty-adapter {:mvn/version "1.7.0-RC1"}
+        tea-time {:mvn/version "1.0.0"}
+        metosin/jsonista {:mvn/version "0.2.1"}}}
