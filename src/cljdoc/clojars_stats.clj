@@ -15,8 +15,7 @@
   (->> (:body (http/get "https://clojars.org/stats/"))
        (re-seq #"downloads-\d{8}\.edn")
        (map #(str "https://clojars.org/stats/" %))
-       (set)
-       (sort)))
+       (set)))
 
 (defn read-file [uri]
   (let [data-dir (io/file "data")]
@@ -59,8 +58,9 @@
 
 (defn not-yet-imported [db]
   (->> (map :uri (sql/query db ["SELECT uri FROM imported_files"]))
-       (apply disj (set (stats-files)))
-       (sort)))
+       (apply disj (stats-files))
+       (sort)
+       (reverse)))
 
 (defn update! [db]
   (let [todo (not-yet-imported db)]
