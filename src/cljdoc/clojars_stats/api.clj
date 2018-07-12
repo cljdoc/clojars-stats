@@ -26,6 +26,7 @@
       (if-let [{:keys [query-fn params]} (get exposed-queries uri)]
         (if (every? query-params (map name params))
           {:status 200
+           :headers {"Content-Type" "application/json"}
            :body (->> (for [p params] [p (get query-params (name p))])
                       (into {})
                       (query-fn db)
