@@ -9,8 +9,6 @@
             [tea-time.core :as tt])
   (:import (java.time Instant)))
 
-(def data-dir (doto (io/file "data") (.mkdir)))
-
 (defn stats-files []
   (->> (:body (http/get "https://clojars.org/stats/"))
        (re-seq #"downloads-\d{8}\.edn")
