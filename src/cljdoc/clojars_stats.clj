@@ -65,7 +65,7 @@
 (defn update! [db]
   (let [todo (not-yet-imported db)]
     (println (count todo) "files to import...")
-    (import! db (take 10 todo))
+    (import! db (take 20 todo))
     (< 0 (count todo))))
 
 (defn -main [db-file]
@@ -79,7 +79,7 @@
     (println "Starting background process...")
     (tt/start!)
     (api/start! {:db db :port 3000})
-    (tt/every! (* 60 60) (bound-fn [] (update! db)))
+    (tt/every! (* 1 60) (bound-fn [] (update! db)))
     (let [signal (java.util.concurrent.CountDownLatch. 1)]
       (.await signal))))
 
