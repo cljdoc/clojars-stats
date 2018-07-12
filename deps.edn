@@ -1,6 +1,5 @@
 {:paths ["src" "resources"]
- :deps {clj-http-lite {:mvn/version "0.3.0"}
-        com.layerware/hugsql {:mvn/version "0.4.9"}
+ :deps {com.layerware/hugsql {:mvn/version "0.4.9"}
         org.xerial/sqlite-jdbc {:mvn/version "3.20.0"}
         org.clojure/java.jdbc {:mvn/version "0.7.0"}
         ring/ring-core {:mvn/version "1.7.0-RC1"}

@@ -5,12 +5,11 @@
             [clojure.edn :as edn]
             [clojure.string :as string]
             [clojure.java.io :as io]
-            [clj-http.lite.client :as http]
             [tea-time.core :as tt])
   (:import (java.time Instant)))
 
 (defn stats-files []
-  (->> (:body (http/get "https://clojars.org/stats/"))
+  (->> (slurp "https://clojars.org/stats/")
        (re-seq #"downloads-\d{8}\.edn")
        (map #(str "https://clojars.org/stats/" %))
        (set)))
