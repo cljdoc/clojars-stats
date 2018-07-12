@@ -49,13 +49,4 @@
 
   (.stop srv)
 
-  (every? {"group_id" 1} ["group_id" "artifact_id"])
-
-  (let [query-params {"group_id" 1 "artifact_id" 2}
-        params [:group_id :artifact_id]]
-
-    )
-
-
-
   )
