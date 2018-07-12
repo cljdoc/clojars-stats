@@ -6,6 +6,7 @@
             [clojure.string :as string]))
 
 (def exposed-queries
+  ;; NEVER change those map entries, only add new stuff as needed
   {"/artifact-monthly" {:query-fn db/artifact-monthly
                         :params [:group_id :artifact_id]}})
 
