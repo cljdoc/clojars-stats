@@ -10,5 +10,11 @@ E.g. https://clojars-stats.cljdoc.xyz/artifact-monthly?group_id=reagent&artifact
 
 More to come as the need arises while working on https://cljdoc.xyz.
 
+Run locally using `clj`
+```
+clj -m cljdoc.clojars-stats clojars-stats.db
+```
+or use the almighty REPL.
+
 If you are interested in adding useful queries, feel invited to do so.
 The entire codebase is 135 LOC which should make contributing a smooth ride.
