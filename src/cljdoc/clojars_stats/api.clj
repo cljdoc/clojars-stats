@@ -28,8 +28,9 @@
                                  {:status 200
                                   :body (query-fn db (get-in request [:parameters :query]))})}}])]
       {:data {:coercion reitit.coercion.spec/coercion
-              :middleware [reitit.ring.coercion/coerce-request-middleware
-                           muuntaja.middleware/wrap-format]
+              :middleware [muuntaja.middleware/wrap-format
+                           reitit.ring.coercion/coerce-exceptions-middleware
+                           reitit.ring.coercion/coerce-request-middleware]
               :swagger {:id ::clojars-stats
                         :info {:title "Clojars Stats API"
                                :description "Contribute more at https://github.com/cljdoc/clojars-stats"}}}})
