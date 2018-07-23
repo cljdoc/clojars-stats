@@ -36,7 +36,8 @@
                                :description "Contribute more at https://github.com/cljdoc/clojars-stats"}}}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler {:path "/"
-                                             :config {:doc-expansion "list"}})
+                                             :config {:doc-expansion "list"
+                                                      :validator-url nil}})
       (ring/create-default-handler))))
 
 (defn start! [{:keys [db port]}]
