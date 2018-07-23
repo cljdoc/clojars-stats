@@ -2,40 +2,41 @@
   (:require [cljdoc.clojars-stats.db :as db]
             [ring.middleware.params :as params]
             [ring.adapter.jetty :as jetty]
-            [jsonista.core :as j]
-            [clojure.string :as string]))
+            [reitit.ring :as ring]
+            [reitit.ring.coercion]
+            [reitit.coercion.spec]
+            [reitit.swagger :as swagger]
+            [reitit.swagger-ui :as swagger-ui]
+            [muuntaja.middleware]))
 
 (def exposed-queries
   ;; NEVER change those map entries, only add new stuff as needed
   {"/artifact-monthly" {:query-fn db/artifact-monthly
-                        :params [:group_id :artifact_id]}})
-
-(def index-page
-  (->> ["<pre>"
-        "Various endpoints are available:\n"
-        (for [[k {:keys [params]}] exposed-queries]
-          (str k " query-params: " (mapv name params) "\n"))
-        "\nContribute more at https://github.com/cljdoc/clojars-stats"
-        "</pre>"]
-       flatten
-       (string/join "\n")))
+                        :summary "get downloads per timespan"
+                        :params {:group_id string?
+                                 :artifact_id string?}}})
 
 (defn make-handler [db]
-  (fn handler [{:keys [uri query-params]}]
-    (if (= "/" uri)
-      {:status 200 :body index-page}
-      (if-let [{:keys [query-fn params]} (get exposed-queries uri)]
-        (if (every? query-params (map name params))
-          {:status 200
-           :headers {"Content-Type" "application/json"}
-           :body (->> (for [p params] [p (get query-params (name p))])
-                      (into {})
-                      (query-fn db)
-                      (j/write-value-as-string))}
-          {:status 400
-           :body (format "Insufficient parameters:\nProvided: %s\nExpected: %s" query-params params)})
-        {:status 404
-         :body (format "Unknown query: %s" uri)}))))
+  (ring/ring-handler
+    (ring/router
+      [["/swagger.json" {:get {:no-doc true
+                               :handler (swagger/create-swagger-handler)}}]
+       (for [[path {:keys [query-fn params summary]}] exposed-queries]
+         [path {:get {:parameters {:query params}
+                      :swagger {:summary summary}
+                      :handler (fn [request]
+                                 {:status 200
+                                  :body (query-fn db (get-in request [:parameters :query]))})}}])]
+      {:data {:coercion reitit.coercion.spec/coercion
+              :middleware [muuntaja.middleware/wrap-format
+                           reitit.ring.coercion/coerce-exceptions-middleware
+                           reitit.ring.coercion/coerce-request-middleware]
+              :swagger {:id ::clojars-stats
+                        :info {:title "Clojars Stats API"
+                               :description "Contribute more at https://github.com/cljdoc/clojars-stats"}}}})
+    (ring/routes
+      (swagger-ui/create-swagger-ui-handler {:path "/"})
+      (ring/create-default-handler))))
 
 (defn start! [{:keys [db port]}]
   (assert (and db port))
