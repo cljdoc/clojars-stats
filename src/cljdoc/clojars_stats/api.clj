@@ -35,7 +35,8 @@
                         :info {:title "Clojars Stats API"
                                :description "Contribute more at https://github.com/cljdoc/clojars-stats"}}}})
     (ring/routes
-      (swagger-ui/create-swagger-ui-handler {:path "/"})
+      (swagger-ui/create-swagger-ui-handler {:path "/"
+                                             :config {:doc-expansion "list"}})
       (ring/create-default-handler))))
 
 (defn start! [{:keys [db port]}]
@@ -45,8 +46,11 @@
       (jetty/run-jetty {:port port :join? false})))
 
 (comment
+  (def db {:classname   "org.sqlite.JDBC"
+           :subprotocol "sqlite"
+           :subname     "clojars-stats.db"})
 
-  (def srv (start! {:db cljdoc.clojars-stats/db :port 3000}))
+  (def srv (start! {:db db :port 3000}))
 
   (.stop srv)
 
