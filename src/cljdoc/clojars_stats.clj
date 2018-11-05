@@ -81,13 +81,21 @@
       (.await signal))))
 
 (comment
+  (def db {:classname   "org.sqlite.JDBC"
+           :subprotocol "sqlite"
+           :subname     "clojars-stats.db"})
+
   (time (-main))
 
   (db/create-imported-files-table db)
+  (db/create-stats-table db)
   (db/artifact-monthly db {:group_id "reagent" :artifact_id "reagent"})
 
   (sql/insert! db :imported_files {:date "a" :uri "b"})
 
-  (while (update!))
+  (while (update! db))
+
+
+  (update! db)
 
   )
