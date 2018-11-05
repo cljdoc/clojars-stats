@@ -16,7 +16,8 @@ create table stats (
   group_id    TEXT,
   artifact_id TEXT,
   version     TEXT,
-  downloads   INT
+  downloads   INT,
+  CONSTRAINT stats_keys UNIQUE (date, group_id, artifact_id, version)
 )
 
 -- :name artifact-monthly
