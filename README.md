@@ -17,4 +17,4 @@ clj -m cljdoc.clojars-stats clojars-stats.db
 or use the almighty REPL.
 
 If you are interested in adding useful queries, feel invited to do so.
-The entire codebase is 135 LOC which should make contributing a smooth ride.
+The entire codebase is <200 LOC which should make contributing a smooth ride.

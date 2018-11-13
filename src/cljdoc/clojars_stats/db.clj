@@ -6,5 +6,4 @@
 
 (comment
   (artifact-monthly cljdoc.clojars-stats/db {:group_id "reagent" :artifact_id "reagent"})
-
   )
